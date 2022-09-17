@@ -9,6 +9,9 @@ export class VoteList extends HTMLElement {
     this.attachShadow({ mode: 'open' })
     this.shadowRoot.innerHTML = `
       <style>
+        :host { text-align: center; }
+        header { padding: var(--spacing-large); }
+        footer { padding: var(--spacing-medium); }
         ul {
           list-style: none;
           margin: var(--spacing-none);

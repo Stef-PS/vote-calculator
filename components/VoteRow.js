@@ -15,7 +15,7 @@ class VoteRow extends HTMLElement {
           flex-direction: row;
           justify-content: space-between;
           align-items: center;
-          padding: var(--spacing-small) var(--spacing-none);
+          padding: var(--spacing-none) var(--spacing-none) var(--spacing-small);
         }
         main {
           flex: 1;
@@ -24,6 +24,8 @@ class VoteRow extends HTMLElement {
         }
         header {
           margin-right:var(--spacing-small);
+          font-size: 85%;
+          font-style: italic;
         }
         footer {
           margin-left: var(--spacing-small);

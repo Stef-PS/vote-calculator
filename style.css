@@ -1,11 +1,12 @@
 /* https://coolors.co/fcfaf7-150e04-7789da-e3b445-c17198-b86161 */
 
 :root {
-  --color-white: #hsl(36, 45%, 98%);
-  --color-black: #hsl(36, 68%, 5%);
+  --color-white: hsl(36, 45%, 98%);
+  --color-black: hsl(36, 68%, 5%);
   --color-blue: hsl(229, 47%, 74%);
-  --color-yellow: hsl(42, 74%, 58%);
-  --color-pink: #hsl(331, 39%, 60%);
+  --color-blue-dark: hsl(229, 47%, 50%);
+  --color-yellow: hsl(42, 88%, 67%);
+  --color-pink: hsl(331, 80%, 85%);
 
   --spacing-none: 0;
   --spacing-small: 0.5rem;
@@ -29,8 +30,10 @@ body {
 }
 
 body > header > h1 {
-  background-color: var(--color-blue);
-  color: var(--color-black);
-  padding: var(--spacing-small);
+  background-color: var(--color-blue-dark);
+  color: var(--color-white);
+  padding: var(--spacing-medium);
   text-align: center;
+  font-weight: normal;
+  font-size: 140%;
 }

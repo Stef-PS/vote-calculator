@@ -19,6 +19,8 @@ class VoteCard extends HTMLElement {
           text-align: center;
           padding: 1rem;
           position: relative;
+          font-weight: bold;
+          font-size: 105%;
         }
         aside {
           position: absolute;

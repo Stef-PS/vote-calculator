@@ -54,16 +54,23 @@ class VoteRow extends HTMLElement {
     this.#main.innerHTML = ''
     this.#vote.forEach((vote, index) => {
       const card = document.createElement('vote-card')
-      card.setAttribute('index', index + 1)
+      card.setAttribute('index', index)
       card.setAttribute('voters', vote)
+      card.addEventListener('update', this.#update.bind(this))
       this.#main.appendChild(card)
     })
+  }
+
+  #update({ detail: { index, voters } }) {
+    this.#vote[index] = voters
+    this.dispatchEvent(new CustomEvent('update', { detail: { index: this.#index, vote: this.#vote } }))
+    this.#render()
   }
 
   #voteAverage() {
     const total = this.#vote.reduce((acc, vote) => acc + vote, 0)
     const sum = this.#vote.reduce((acc, vote, index) => acc + vote * (index + 1), 0)
-    return total ? sum / total : 0
+    return total ? Math.round(100* sum / total) / 100 : 0
   }
 
   connectedCallback() {

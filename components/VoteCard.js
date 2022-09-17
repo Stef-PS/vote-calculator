@@ -1,7 +1,7 @@
 class VoteCard extends HTMLElement {
   #index = 0
   #voters = 0
-  #main = null
+  #value = null
   #aside = null
 
   constructor() {
@@ -12,12 +12,13 @@ class VoteCard extends HTMLElement {
         :host {
           display: inline-block;
           width: 3rem;
-          background-color: lightblue;
+          background-color: var(--color-blue);
           position: relative;
         }
         main {
           text-align: center;
           padding: 1rem;
+          position: relative;
         }
         aside {
           position: absolute;
@@ -31,23 +32,51 @@ class VoteCard extends HTMLElement {
           justify-content: center;
           align-items: center;
         }
+        .plus, .minus {
+          background-color: transparent;
+          border: none;
+          position: absolute;
+          bottom: 0;
+        }
+        .plus { right: 0; }
+        .minus { left: 0; }
       </style>
-      <main></main>
+      <main>
+        <div></div>
+        <button class="plus">+</button>
+        <button class="minus">-</button>
+      </main>
       <aside></aside>
     `
   }
 
   #render() {
-    this.#main.innerText = this.#index.toString()
+    this.#value.innerText = (this.#index + 1).toString()
     this.#aside.innerText = this.#voters.toString()
     this.#aside.style.display = this.#voters ? 'flex' : 'none'
+  }
+
+  #increment() {
+    this.#voters++
+    this.dispatchEvent(new CustomEvent('update', { detail: { index: this.#index, voters: this.#voters } }))
+    this.#render()
+  }
+
+  #decrement() {
+    if (this.#voters) {
+      this.#voters--
+      this.dispatchEvent(new CustomEvent('update', { detail: { index: this.#index, voters: this.#voters } }))
+      this.#render()
+    }
   }
 
   connectedCallback() {
     this.#index = parseInt(this.getAttribute('index'))
     this.#voters = parseInt(this.getAttribute('voters'))
-    this.#main = this.shadowRoot.querySelector('main')
+    this.#value = this.shadowRoot.querySelector('main div')
     this.#aside = this.shadowRoot.querySelector('aside')
+    this.shadowRoot.querySelector('.plus').addEventListener('click', () => this.#increment())
+    this.shadowRoot.querySelector('.minus').addEventListener('click', () => this.#decrement())
     this.#render()
   }
 }

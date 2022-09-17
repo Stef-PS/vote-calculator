@@ -34,13 +34,17 @@ export class VoteList extends HTMLElement {
       row.setAttribute('index', index)
       row.setAttribute('vote', vote)
       row.addEventListener('delete', this.#deleteRow.bind(this))
+      row.addEventListener('update', this.#update.bind(this))
       this.#ul.appendChild(row)
     })
-    this.#global.innerText = this.#totalAverage()
+    this.#global.innerText = Math.round(100 * this.#totalAverage()) / 100
     localStorage.setItem('vote-list', JSON.stringify(this.#list))
   }
 
-
+  #update({ detail: { index, vote } }) {
+    this.#list[index] = vote
+    this.#render()
+  }
 
   #addRow() {
     this.#list.push([0, 0, 0, 0, 0])

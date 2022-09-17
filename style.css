@@ -1,0 +1,14 @@
+:root {
+  --color-blue: #1e90ff;
+  --color-yellow: #ffff00;
+  --color-pink: #ffaaaa;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-red: #ff0000;
+
+  --spacing-none: 0;
+  --spacing-small: 0.5rem;
+  --spacing-medium: 1rem;
+  --spacing-large: 1.5rem;
+  --spacing-xlarge: 3rem;
+}

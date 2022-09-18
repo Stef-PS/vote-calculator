@@ -3,6 +3,7 @@ export class VoteList extends HTMLElement {
   #ul = null
   #addButton = null
   #list = []
+  #active = { index: -1, rank: -1 }
 
   constructor() {
     super();
@@ -16,6 +17,11 @@ export class VoteList extends HTMLElement {
           list-style: none;
           margin: var(--spacing-none);
           padding: var(--spacing-none) var(--spacing-small);
+        }
+        footer button {
+          background-color: var(--color-pink);
+          padding: var(--spacing-small) var(--spacing-medium);
+          border: none;
         }
       </style>
       <header>
@@ -36,12 +42,18 @@ export class VoteList extends HTMLElement {
       const row = document.createElement('vote-row')
       row.setAttribute('index', index)
       row.setAttribute('vote', vote)
+      if (index === this.#active.index) row.setAttribute('active', true)
+      row.setAttribute('active-rank', this.#active.rank)
       row.addEventListener('delete', this.#deleteRow.bind(this))
-      row.addEventListener('update', this.#update.bind(this))
+      row.addEventListener('show-nav', this.#showNav.bind(this))
       this.#ul.appendChild(row)
     })
     this.#global.innerText = Math.round(100 * this.#totalAverage()) / 100
     localStorage.setItem('vote-list', JSON.stringify(this.#list))
+  }
+
+  #showNav({ detail: { index, rank } }) {
+    console.log('showNav', index, rank)
   }
 
   #update({ detail: { index, vote } }) {

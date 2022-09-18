@@ -3,6 +3,7 @@ class VoteCard extends HTMLElement {
   #voters = 0
   #value = null
   #aside = null
+  #active = false
 
   constructor() {
     super()
@@ -11,14 +12,16 @@ class VoteCard extends HTMLElement {
       <style>
         :host {
           display: inline-block;
-          width: 3rem;
-          background-color: var(--color-blue);
+          width: var(--spacing-xxlarge);
+          height: var(--spacing-xxlarge);
           position: relative;
         }
         main {
           text-align: center;
           padding: 1rem;
           position: relative;
+          background-color: var(--color-blue);
+          color: var(--color-black);
           font-weight: bold;
           font-size: 105%;
         }
@@ -34,20 +37,12 @@ class VoteCard extends HTMLElement {
           justify-content: center;
           align-items: center;
         }
-        .plus, .minus {
-          background-color: transparent;
-          border: none;
-          position: absolute;
-          bottom: 0;
+        .active {
+          background-color: var(--color-blue-dark);
+          color: var(--color-white);
         }
-        .plus { right: 0; }
-        .minus { left: 0; }
       </style>
-      <main>
-        <div></div>
-        <button class="plus">+</button>
-        <button class="minus">-</button>
-      </main>
+      <main></main>
       <aside></aside>
     `
   }
@@ -56,29 +51,20 @@ class VoteCard extends HTMLElement {
     this.#value.innerText = (this.#index + 1).toString()
     this.#aside.innerText = this.#voters.toString()
     this.#aside.style.display = this.#voters ? 'flex' : 'none'
+    this.#value.classList.toggle('active', this.#active)
   }
 
-  #increment() {
-    this.#voters++
-    this.dispatchEvent(new CustomEvent('update', { detail: { index: this.#index, voters: this.#voters } }))
-    this.#render()
-  }
-
-  #decrement() {
-    if (this.#voters) {
-      this.#voters--
-      this.dispatchEvent(new CustomEvent('update', { detail: { index: this.#index, voters: this.#voters } }))
-      this.#render()
-    }
+  #showNav() {
+    this.dispatchEvent(new CustomEvent('show-nav', { detail: { rank: this.#index } }))
   }
 
   connectedCallback() {
     this.#index = parseInt(this.getAttribute('index'))
     this.#voters = parseInt(this.getAttribute('voters'))
-    this.#value = this.shadowRoot.querySelector('main div')
+    this.#active = this.hasAttribute('active')
+    this.#value = this.shadowRoot.querySelector('main')
     this.#aside = this.shadowRoot.querySelector('aside')
-    this.shadowRoot.querySelector('.plus').addEventListener('click', () => this.#increment())
-    this.shadowRoot.querySelector('.minus').addEventListener('click', () => this.#decrement())
+    this.#value.addEventListener('click', this.#showNav.bind(this))
     this.#render()
   }
 }

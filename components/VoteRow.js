@@ -4,6 +4,8 @@ class VoteRow extends HTMLElement {
   #footer = null
   #index = null
   #vote = [0, 0, 0, 0, 0]
+  #activeRank = -1
+  #active = true
 
   constructor() {
     super();
@@ -33,8 +35,8 @@ class VoteRow extends HTMLElement {
         }
         footer div {
           background-color: var(--color-yellow);
-          width: var(--spacing-xlarge);
-          height: var(--spacing-xlarge);
+          width: var(--spacing-xxlarge);
+          height: var(--spacing-xxlarge);
           display: flex;
           justify-content: center;
           align-items: center;
@@ -54,19 +56,19 @@ class VoteRow extends HTMLElement {
     this.#header.innerText = `#${this.#index + 1}`
     this.#footer.innerText = this.#voteAverage()
     this.#main.innerHTML = ''
-    this.#vote.forEach((vote, index) => {
+    this.#vote.forEach((vote, rank) => {
       const card = document.createElement('vote-card')
-      card.setAttribute('index', index)
+      card.setAttribute('index', rank)
       card.setAttribute('voters', vote)
-      card.addEventListener('update', this.#update.bind(this))
+      if (this.#active && this.#activeRank === rank) card.setAttribute('active', true)
+      card.addEventListener('show-nav', this.#showNav.bind(this))
       this.#main.appendChild(card)
     })
   }
 
-  #update({ detail: { index, voters } }) {
-    this.#vote[index] = voters
-    this.dispatchEvent(new CustomEvent('update', { detail: { index: this.#index, vote: this.#vote } }))
-    this.#render()
+  #showNav(e) {
+    e.stopPropagation()
+    this.dispatchEvent(new CustomEvent('show-nav', { detail: { index: this.#index, rank: e.detail.rank } }))
   }
 
   #voteAverage() {
@@ -81,6 +83,8 @@ class VoteRow extends HTMLElement {
     this.#footer = this.shadowRoot.querySelector('div')
     this.#index = parseInt(this.getAttribute('index'))
     this.#vote = this.getAttribute('vote').split(',').map(vote => parseInt(vote))
+    this.#active = this.hasAttribute('active')
+    this.#activeRank = parseInt(this.getAttribute('active-rank'))
     const closeButton = this.shadowRoot.querySelector('cross-icon')
     closeButton.addEventListener('click', () => {
       this.dispatchEvent(new CustomEvent('delete', { detail: this.#index }))

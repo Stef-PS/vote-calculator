@@ -8,11 +8,11 @@ class CrossIcon extends HTMLElement {
           display: flex;
           justify-content: center;
           align-items: center;
-          margin-left: var(--spacing-small);
+          margin-left: var(--spacing-medium);
         }
         svg {
-          width: 1rem;
-          height: 1rem;
+          width: var(--spacing-large);
+          height: var(--spacing-large);
           stroke: red;
         }
       </style>

@@ -24,6 +24,7 @@ class VoteSetter extends HTMLElement {
           margin: var(--spacing-small);
           border-radius: var(--spacing-small);
           border: 1px solid var(--color-black);
+          touch-action: manipulation;
         }
       </style>
       <div>

@@ -15,7 +15,7 @@ export class VoteList extends HTMLElement {
           width: 100%;
         }
         main {
-          height: calc(100vh - var(--header-height));
+          height: calc(100% - var(--header-height));
           display: flex;
           flex-direction: column;
           justify-content: space-between;
@@ -35,6 +35,7 @@ export class VoteList extends HTMLElement {
           background-color: var(--color-pink);
           padding: var(--spacing-small) var(--spacing-medium);
           border: none;
+          touch-action: manipulation;
         }
       </style>
       <main>

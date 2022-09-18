@@ -12,13 +12,11 @@ class VoteCard extends HTMLElement {
       <style>
         :host {
           display: inline-block;
-          width: var(--spacing-xxlarge);
-          height: var(--spacing-xxlarge);
           position: relative;
         }
         main {
           text-align: center;
-          padding: 1rem;
+          padding: var(--spacing-medium);
           position: relative;
           background-color: var(--color-blue);
           color: var(--color-black);

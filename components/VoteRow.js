@@ -15,23 +15,25 @@ class VoteRow extends HTMLElement {
         :host {
           display: flex;
           flex-direction: row;
-          justify-content: space-between;
+          justify-content: center;
           align-items: center;
           padding: var(--spacing-none) var(--spacing-small) var(--spacing-small);
+          margin: 0 auto;
         }
         main {
           flex: 1;
+          max-width: 260px;
           display: flex;
           justify-content: space-between;
         }
         header {
-          margin-right:var(--spacing-small);
+          margin-right:var(--spacing-medium);
           width: var(--spacing-large);
           font-size: 85%;
           font-style: italic;
         }
         footer {
-          margin-left: var(--spacing-small);
+          margin-left: var(--spacing-medium);
           display: flex;
         }
         footer div {

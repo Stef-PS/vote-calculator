@@ -11,6 +11,9 @@ export class VoteList extends HTMLElement {
     this.shadowRoot.innerHTML = `
       <style>
         :host { text-align: center; }
+        main {
+          height: 100vh;
+        }
         header { padding: var(--spacing-large); }
         footer { padding: var(--spacing-medium); }
         ul {
@@ -24,15 +27,17 @@ export class VoteList extends HTMLElement {
           border: none;
         }
       </style>
-      <header>
-        Total average = <span></span>
-      </header>
-      <ul></ul>
-      <footer>
-        <button>
-          Ajouter une ligne
-        </button>
-      </footer>
+      <main>
+        <header>
+          Total average = <span></span>
+        </header>
+        <ul></ul>
+        <footer>
+          <button>
+            Ajouter une ligne
+          </button>
+        </footer>
+      </main>
     `
   }
 
@@ -53,11 +58,12 @@ export class VoteList extends HTMLElement {
   }
 
   #showNav({ detail: { index, rank } }) {
-    console.log('showNav', index, rank)
+    this.#active = { index, rank }
+    this.#render()
   }
 
-  #update({ detail: { index, vote } }) {
-    this.#list[index] = vote
+  #hideNav() {
+    this.#active = { index: -1, rank: -1 }
     this.#render()
   }
 
@@ -93,6 +99,7 @@ export class VoteList extends HTMLElement {
     this.#ul = this.shadowRoot.querySelector('ul')
     this.#addButton = this.shadowRoot.querySelector('button')
     this.#addButton.addEventListener('click', this.#addRow.bind(this))
+    this.shadowRoot.querySelector('main').addEventListener('click', this.#hideNav.bind(this))
     this.#global = this.shadowRoot.querySelector('header span')
     this.#render()
   }

@@ -54,7 +54,8 @@ class VoteCard extends HTMLElement {
     this.#value.classList.toggle('active', this.#active)
   }
 
-  #showNav() {
+  #showNav(e) {
+    e.stopPropagation()
     this.dispatchEvent(new CustomEvent('show-nav', { detail: { rank: this.#index } }))
   }
 

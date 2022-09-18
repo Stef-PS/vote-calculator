@@ -10,16 +10,26 @@ export class VoteList extends HTMLElement {
     this.attachShadow({ mode: 'open' })
     this.shadowRoot.innerHTML = `
       <style>
-        :host { text-align: center; }
+        :host {
+          text-align: center;
+          width: 100%;
+        }
         main {
-          height: 100vh;
+          height: calc(100vh - var(--header-height));
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: center;
         }
         header { padding: var(--spacing-large); }
         footer { padding: var(--spacing-medium); }
         ul {
+          overflow: auto;
+          flex: 1;
           list-style: none;
           margin: var(--spacing-none);
           padding: var(--spacing-none) var(--spacing-small);
+          width: 100%;
         }
         footer button {
           background-color: var(--color-pink);
@@ -37,6 +47,7 @@ export class VoteList extends HTMLElement {
             Ajouter une ligne
           </button>
         </footer>
+        <vote-setter></vote-setter>
       </main>
     `
   }
@@ -58,12 +69,18 @@ export class VoteList extends HTMLElement {
   }
 
   #showNav({ detail: { index, rank } }) {
+    if (this.#active.index === index && this.#active.rank === rank) {
+      this.#hideNav()
+      return
+    }
     this.#active = { index, rank }
+    this.shadowRoot.querySelector('vote-setter').setAttribute('visible', true)
     this.#render()
   }
 
   #hideNav() {
     this.#active = { index: -1, rank: -1 }
+    this.shadowRoot.querySelector('vote-setter').removeAttribute('visible')
     this.#render()
   }
 
@@ -93,6 +110,26 @@ export class VoteList extends HTMLElement {
     return this.#voteAverage(votes)
   }
 
+  #increment() {
+    console.log('increment')
+    if (this.#active.index === -1 || this.#active.rank === -1) return
+    this.#list[this.#active.index][this.#active.rank]++
+    this.#render()
+  }
+
+  #decrement() {
+    if (this.#active.index === -1 || this.#active.rank === -1) return
+    if (this.#list[this.#active.index][this.#active.rank] === 0) return
+    this.#list[this.#active.index][this.#active.rank]--
+    this.#render()
+  }
+
+  #reset() {
+    if (this.#active.index === -1 || this.#active.rank === -1) return
+    this.#list[this.#active.index][this.#active.rank] = 0
+    this.#render()
+  }
+
   connectedCallback() {
     const stored = localStorage.getItem('vote-list')
     this.#list = stored ? JSON.parse(stored) : []
@@ -100,6 +137,10 @@ export class VoteList extends HTMLElement {
     this.#addButton = this.shadowRoot.querySelector('button')
     this.#addButton.addEventListener('click', this.#addRow.bind(this))
     this.shadowRoot.querySelector('main').addEventListener('click', this.#hideNav.bind(this))
+    const setter = this.shadowRoot.querySelector('vote-setter')
+    setter.addEventListener('plus', this.#increment.bind(this))
+    setter.addEventListener('minus', this.#decrement.bind(this))
+    setter.addEventListener('reset', this.#reset.bind(this))
     this.#global = this.shadowRoot.querySelector('header span')
     this.#render()
   }
